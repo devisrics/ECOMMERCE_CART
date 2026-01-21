@@ -1,22 +1,25 @@
-const products=require('../data/products.json')
-const product=require('../models/productModel')
-const dotenv=require('dotenv')
-const ConnectDatabase=require('../config/database')
+const products = require('../data/products.json');
+const Product = require('../models/productModel');
+const dotenv = require('dotenv');
+const ConnectDatabase = require('../config/database');
 
-dotenv.config({path:'BACKEND/config/config.env'})
-ConnectDatabase()
+// Load environment variables (correct relative path)
+dotenv.config({ path: '../config/config.env' });
 
-const seedProducts = async()=>{
-    try{
-    await product.deleteMany()
-    console.log('products deleted');
-    await product.insertMany(products)
-    console.log('all products added');
-    }
-    catch(err){
-        console.log(err.message);   
-    }
-    process.exit()
-}
+// Connect to MongoDB
+ConnectDatabase();
 
-seedProducts()
+const seedProducts = async () => {
+  try {
+    await Product.deleteMany();
+    console.log('Existing products deleted');
+
+    await Product.insertMany(products);
+    console.log('All products added successfully');
+  } catch (err) {
+    console.error('Seeding error:', err.message);
+  }
+  process.exit();
+};
+
+seedProducts();
