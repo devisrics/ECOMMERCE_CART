@@ -7,7 +7,15 @@ exports.processPayment = catchAsyncError(async (req, res, next) => {
         currency: "usd",
         description: "TEST PAYMENT",
         metadata: { integration_check: "accept_payment" },
-        shipping: req.body.shipping
+        shipping: {
+            name: req.body.shipping.name,
+            address: {
+                line1: req.body.shipping.address,
+                city: req.body.shipping.city,
+                postal_code: req.body.shipping.postalCode,
+                country: req.body.shipping.country
+            }
+        }
     });
 
     res.status(200).json({
@@ -18,6 +26,6 @@ exports.processPayment = catchAsyncError(async (req, res, next) => {
 
 exports.sendStripeApi = catchAsyncError((req, res, next) => {
     res.status(200).json({
-        stripeApiKey: process.env.STRIPE_API_KEY
+        stripeApiKey: process.env.STRIPE_API_KEY 
     });
 });
