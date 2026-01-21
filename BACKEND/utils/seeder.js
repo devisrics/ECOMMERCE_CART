@@ -1,12 +1,15 @@
+const path = require('path');
 const products = require('../data/products.json');
 const Product = require('../models/productModel');
 const dotenv = require('dotenv');
 const ConnectDatabase = require('../config/database');
 
-// Load environment variables (correct relative path)
-dotenv.config({ path: '../config/config.env' });
+// Load environment variables (absolute path)
+dotenv.config({ path: path.resolve(__dirname, '../config/config.env') });
 
-// Connect to MongoDB
+// Debug: check DB URI
+console.log('Mongo URI:', process.env.DB_LOCAL_URI);
+
 ConnectDatabase();
 
 const seedProducts = async () => {
