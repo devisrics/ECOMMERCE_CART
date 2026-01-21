@@ -1,0 +1,3 @@
+config.env
+BACKEND/config/config.env
+.env
