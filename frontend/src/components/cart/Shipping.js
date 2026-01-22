@@ -59,7 +59,7 @@ export function CheckoutSteps({ shipping, confirmOrder, payment }) {
 }
 
 // ---------------- Shipping Component ----------------
-export function Shipping() {
+export default function Shipping() {
   const { shippingInfo = {} } = useSelector(state => state.cartState);
   const [address, setAddress] = useState(shippingInfo.address || "");
   const [city, setCity] = useState(shippingInfo.city || "");
