@@ -23,7 +23,8 @@ const upload = multer({
       cb(null, path.join(__dirname, '..', 'uploads/product'));
     },
     filename: (req, file, cb) => {
-      cb(null, file.originalname);
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, uniqueSuffix + '-' + file.originalname);
     }
   })
 });
