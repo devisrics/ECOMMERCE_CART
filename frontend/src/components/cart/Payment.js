@@ -29,7 +29,7 @@ export default function Payment() {
     const paymentData = {
         amount: Math.round(orderInfo.totalPrice)
     };
-
+    console.log("Payment data sent:", paymentData);
     const order = {
         orderItems: items,
         shippingInfo,
