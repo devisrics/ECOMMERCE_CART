@@ -6,12 +6,12 @@ const sendToken = require('../utils/jwt');
 const crypto = require('crypto');
 const path = require('path');
 
+// ==================== REGISTER ====================
 exports.registerUser = catchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
 
   let avatar;
   let BASE_URL = process.env.BACKEND_URL;
-
   if (process.env.NODE_ENV === 'production') {
     BASE_URL = `${req.protocol}://${req.get('host')}`;
   }
@@ -30,6 +30,7 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
   sendToken(user, 201, res);
 });
 
+// ==================== LOGIN ====================
 exports.loginUser = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -37,15 +38,17 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler('Please enter email and password', 400));
   }
 
+  // ✅ Select password explicitly
   const user = await User.findOne({ email }).select('+password');
 
-  if (!user || !(await user.isValidpassword(password))) {
+  if (!user || !(await user.isValidPassword(password))) {
     return next(new ErrorHandler('Invalid email or password', 401));
   }
 
   sendToken(user, 200, res);
 });
 
+// ==================== LOGOUT ====================
 exports.logoutUser = (req, res) => {
   res.cookie('token', '', {
     httpOnly: true,
@@ -60,7 +63,8 @@ exports.logoutUser = (req, res) => {
   });
 };
 
-exports.forgotpassword = catchAsyncError(async (req, res, next) => {
+// ==================== FORGOT PASSWORD ====================
+exports.forgotPassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
@@ -71,13 +75,11 @@ exports.forgotpassword = catchAsyncError(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   let BASE_URL = process.env.FRONTEND_URL;
-
   if (process.env.NODE_ENV === 'production') {
     BASE_URL = `${req.protocol}://${req.get('host')}`;
   }
 
   const resetUrl = `${BASE_URL}/password/reset/${resetToken}`;
-
   const message = `Your password reset link:\n\n${resetUrl}\n\nIf you did not request this, ignore this email.`;
 
   try {
@@ -100,6 +102,7 @@ exports.forgotpassword = catchAsyncError(async (req, res, next) => {
   }
 });
 
+// ==================== RESET PASSWORD ====================
 exports.resetPassword = catchAsyncError(async (req, res, next) => {
   const resetPasswordToken = crypto
     .createHash('sha256')
@@ -109,7 +112,7 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findOne({
     resetPasswordToken,
     resetPasswordExpire: { $gt: Date.now() }
-  });
+  }).select('+password');
 
   if (!user) {
     return next(new ErrorHandler('Reset token is invalid or expired', 400));
@@ -128,6 +131,7 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
+// ==================== GET PROFILE ====================
 exports.getUserProfile = catchAsyncError(async (req, res) => {
   const user = await User.findById(req.user.id);
 
@@ -137,10 +141,11 @@ exports.getUserProfile = catchAsyncError(async (req, res) => {
   });
 });
 
+// ==================== CHANGE PASSWORD ====================
 exports.changePassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
 
-  if (!(await user.isValidpassword(req.body.oldPassword))) {
+  if (!(await user.isValidPassword(req.body.oldPassword))) {
     return next(new ErrorHandler('Old password is incorrect', 401));
   }
 
@@ -152,6 +157,7 @@ exports.changePassword = catchAsyncError(async (req, res, next) => {
   });
 });
 
+// ==================== UPDATE PROFILE ====================
 exports.updateProfile = catchAsyncError(async (req, res) => {
   const newUserData = {
     name: req.body.name,
@@ -159,7 +165,6 @@ exports.updateProfile = catchAsyncError(async (req, res) => {
   };
 
   let BASE_URL = process.env.BACKEND_URL;
-
   if (process.env.NODE_ENV === 'production') {
     BASE_URL = `${req.protocol}://${req.get('host')}`;
   }
@@ -179,6 +184,7 @@ exports.updateProfile = catchAsyncError(async (req, res) => {
   });
 });
 
+// ==================== ADMIN: GET ALL USERS ====================
 exports.getAllUsers = catchAsyncError(async (req, res) => {
   const users = await User.find();
 
@@ -188,6 +194,7 @@ exports.getAllUsers = catchAsyncError(async (req, res) => {
   });
 });
 
+// ==================== ADMIN: GET SINGLE USER ====================
 exports.getUser = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
@@ -201,6 +208,7 @@ exports.getUser = catchAsyncError(async (req, res, next) => {
   });
 });
 
+// ==================== ADMIN: UPDATE USER ====================
 exports.updateUser = catchAsyncError(async (req, res) => {
   const newUserData = {
     name: req.body.name,
@@ -219,6 +227,7 @@ exports.updateUser = catchAsyncError(async (req, res) => {
   });
 });
 
+// ==================== ADMIN: DELETE USER ====================
 exports.deleteUser = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
