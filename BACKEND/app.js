@@ -33,6 +33,34 @@ app.use('/api/v1', auth);
 app.use('/api/v1', order);
 app.use('/api/v1', payment);
 
+// Middleware
+app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
+
+// API Routes
+app.use('/api/v1', auth);
+app.use('/api/v1', products);
+app.use('/api/v1', order);
+app.use('/api/v1', payment);
+
+// TEST route
+app.get('/api/v1/test', (req, res) => {
+  res.status(200).json({ message: 'API is working!' });
+});
+
+// React build catch-all
+if (process.env.NODE_ENV === 'production') {
+  const buildPath = path.join(__dirname, '../frontend/build');
+  app.use(express.static(buildPath));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(buildPath, 'index.html'));
+  });
+}
+
+// Error middleware
+app.use(errorMiddleware);
+
 // ----- Production React build -----
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(__dirname, '../frontend/build');
