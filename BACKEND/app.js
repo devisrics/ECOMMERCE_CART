@@ -44,9 +44,12 @@ if (process.env.NODE_ENV === 'production') {
   // Serve static files
   app.use(express.static(buildPath));
 
-  // Catch-all for React routes
-  app.get('*', (req, res) => {
-    res.set('Cache-Control', 'no-store'); // prevent caching
+  // Catch-all for React routes (skip API)
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/api/v1')) {
+      return next(); // skip API routes
+    }
+    res.set('Cache-Control', 'no-store');
     res.sendFile(path.resolve(buildPath, 'index.html'));
   });
 }
