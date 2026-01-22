@@ -1,32 +1,24 @@
 const dotenv = require('dotenv');
 const path = require('path');
 
-// ✅ 1. LOAD ENV FIRST (MOST IMPORTANT)
 dotenv.config({ path: path.join(__dirname, 'config', 'config.env') });
 
-// ✅ 2. THEN require everything else
 const app = require('./app');
-const connectdatabase = require('./config/database');
+const connectDatabase = require('./config/database');
 
-// ✅ 3. Connect DB
-connectdatabase();
+connectDatabase();
 
-// ✅ 4. Start server
-const server = app.listen(process.env.PORT, () => {
-  console.log(
-    `Server listening on port ${process.env.PORT} in ${process.env.NODE_ENV}`
-  );
+const PORT = process.env.PORT || 8000;
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
 });
 
-// Error handling
 process.on('unhandledRejection', (err) => {
-  console.log(`Error: ${err.message}`);
-  console.log('Shutting down server due to unhandled rejection');
+  console.error(`Unhandled Rejection: ${err.message}`);
   server.close(() => process.exit(1));
 });
 
 process.on('uncaughtException', (err) => {
-  console.log(`Error: ${err.message}`);
-  console.log('Shutting down server due to uncaught exception');
+  console.error(`Uncaught Exception: ${err.message}`);
   process.exit(1);
 });
