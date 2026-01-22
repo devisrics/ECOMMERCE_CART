@@ -1,22 +1,31 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export default function Product({ product, col = 3 }) {
   return (
     <div className={`col-sm-12 col-md-6 col-lg-${col} my-3`}>
       <div className="card p-3 rounded">
-        {product.images?.length > 0 && (
+        {/* Product Image */}
+        {product.images?.length > 0 ? (
           <img
             className="card-img-top mx-auto"
-            src={product.images[0].image}
+            src={product.images[0].url} 
+            alt={product.name}
+          />
+        ) : (
+          <img
+            className="card-img-top mx-auto"
+            src="/images/products/1.jpg" 
             alt={product.name}
           />
         )}
 
         <div className="card-body d-flex flex-column">
+          {/* Product Name */}
           <h5 className="card-title">
             <Link to={`/product/${product._id}`}>{product.name}</Link>
           </h5>
 
+          {/* Ratings */}
           <div className="ratings mt-auto">
             <div className="rating-outer">
               <div
@@ -27,8 +36,10 @@ export default function Product({ product, col = 3 }) {
             <span id="no_of_reviews">({product.numOfReviews} Reviews)</span>
           </div>
 
+          {/* Price */}
           <p className="card-text">${product.price}</p>
 
+          {/* View Details Button */}
           <Link
             to={`/product/${product._id}`}
             id="view_btn"
