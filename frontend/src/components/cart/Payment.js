@@ -27,7 +27,7 @@ export default function Payment() {
     }
 
     const paymentData = {
-        amount: Math.round(orderInfo.totalPrice * 100)
+        amount: Math.round(orderInfo.totalPrice)
     };
 
     const order = {
