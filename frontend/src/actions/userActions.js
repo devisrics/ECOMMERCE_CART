@@ -46,7 +46,18 @@ import axios from 'axios';
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch(loginRequest());
-    const { data } = await axios.post(`/api/v1/login`, { email, password });
+
+    const config = {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true, 
+    };
+
+    const { data } = await axios.post(
+      "http://13.61.11.157:8000/api/v1/login",
+      { email, password },
+      config
+    );
+
     dispatch(clearCart());
     localStorage.removeItem("cartItems");
     localStorage.removeItem("shippingInfo");
@@ -55,6 +66,7 @@ export const login = (email, password) => async (dispatch) => {
     dispatch(loginFail(error.response?.data?.message || error.message));
   }
 };
+
 
 export const register = (userData) => async (dispatch) => {
   try {
