@@ -21,28 +21,22 @@ export default function ResetPassword() {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error("Passwords do not match", { position: "bottom-center" });
       return;
     }
 
-    const formData = {
-      password,
-      confirmPassword,
-    };
-
-    // ✅ CORRECT CALL
-    dispatch(resetPassword(token, formData));
+    dispatch(resetPassword(token, { password, confirmPassword }));
   };
 
   useEffect(() => {
     if (isPasswordReset) {
-      toast.success("Password reset successful");
+      toast.success("Password reset successful", { position: "bottom-center" });
       dispatch(clearPasswordReset());
       navigate("/login");
     }
 
     if (error) {
-      toast.error(error);
+      toast.error(error, { position: "bottom-center" });
       dispatch(clearAuthError());
     }
   }, [dispatch, error, isPasswordReset, navigate]);
@@ -54,24 +48,28 @@ export default function ResetPassword() {
           <h1 className="mb-3">Reset Password</h1>
 
           <div className="form-group">
-            <label>Password</label>
+            <label htmlFor="password_field">New Password</label>
             <input
+              id="password_field"
               type="password"
               className="form-control"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={6}
             />
           </div>
 
           <div className="form-group">
-            <label>Confirm Password</label>
+            <label htmlFor="confirm_password_field">Confirm Password</label>
             <input
+              id="confirm_password_field"
               type="password"
               className="form-control"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
+              minLength={6}
             />
           </div>
 

@@ -1,34 +1,58 @@
-const express=require('express')
-const multer=require('multer')
-const path=require('path')
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const crypto = require('crypto');
 
-const upload=multer({storage:multer.diskStorage({
-    destination:function(req,file,cb){
-        cb(null,path.join(__dirname,'..','uploads/user'))
-    },
-    filename:function(req,file,cb){
-        cb(null,file.originalname)
-    }
-})})
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '..', 'uploads/user'));
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = crypto.randomBytes(16).toString('hex');
+    const ext = path.extname(file.originalname);
+    cb(null, `${uniqueName}${ext}`);
+  }
+});
 
-const { registerUser, loginUser,logoutUser, forgotpassword, resetPassword, getUserProfile, changePassword, updateProfile, getAllUsers, getUser, updateUser, deleteUser } = require('../controllers/authController')
-const {isAuthenticatedUser,authorizeRoles} = require('../middlewares/authenticate')
-const router=express.Router()
+const upload = multer({
+  storage,
+  limits: { fileSize: 2 * 1024 * 1024 }
+});
 
-router.route('/register').post(upload.single('avatar'),registerUser)
-router.route('/login').post(loginUser)
-router.route('/logout').get(logoutUser)  
-router.route('/password/forgot').post(forgotpassword)
-router.route('/password/reset/:token').put(resetPassword)
-router.route('/myprofile').get(isAuthenticatedUser,getUserProfile)
-router.route('/password/change').put(isAuthenticatedUser,changePassword)
-router.route('/update').put(isAuthenticatedUser,upload.single('avatar'),updateProfile)
+const {
+  registerUser,
+  loginUser,
+  logoutUser,
+  forgotpassword,
+  resetPassword,
+  getUserProfile,
+  changePassword,
+  updateProfile,
+  getAllUsers,
+  getUser,
+  updateUser,
+  deleteUser
+} = require('../controllers/authController');
 
-// Admin routes
-router.route('/admin/users').get(isAuthenticatedUser,authorizeRoles('admin'),getAllUsers)
-router.route('/admin/user/:id').get(isAuthenticatedUser,authorizeRoles('admin'),getUser)
-router.route('/admin/user/:id').put(isAuthenticatedUser,authorizeRoles('admin'),updateUser)
-router.route('/admin/user/:id').delete(isAuthenticatedUser,authorizeRoles('admin'),deleteUser)
+const {
+  isAuthenticatedUser,
+  authorizeRoles
+} = require('../middlewares/authenticate');
 
+const router = express.Router();
 
-module.exports=router
+router.post('/register', upload.single('avatar'), registerUser);
+router.post('/login', loginUser);
+router.post('/logout', isAuthenticatedUser, logoutUser);
+router.post('/password/forgot', forgotpassword);
+router.put('/password/reset/:token', resetPassword);
+router.get('/myprofile', isAuthenticatedUser, getUserProfile);
+router.put('/password/change', isAuthenticatedUser, changePassword);
+router.put('/update', isAuthenticatedUser, upload.single('avatar'), updateProfile);
+
+router.get('/admin/users', isAuthenticatedUser, authorizeRoles('admin'), getAllUsers);
+router.get('/admin/user/:id', isAuthenticatedUser, authorizeRoles('admin'), getUser);
+router.put('/admin/user/:id', isAuthenticatedUser, authorizeRoles('admin'), updateUser);
+router.delete('/admin/user/:id', isAuthenticatedUser, authorizeRoles('admin'), deleteUser);
+
+module.exports = router;

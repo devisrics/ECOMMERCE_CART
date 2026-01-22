@@ -2,14 +2,14 @@ const catchAsyncError = require('../middlewares/catchAsyncError');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.processPayment = catchAsyncError(async (req, res, next) => {
-    const rawAmount = Number(req.body.amount); // convert string → number
-    const amountInCents = Math.round(rawAmount * 100); // integer cents
+    const rawAmount = Number(req.body.amount); 
+    const amountInCents = Math.round(rawAmount * 100); 
 
     console.log("Amount sent to Stripe:", amountInCents);
 
     const paymentIntent = await stripe.paymentIntents.create({
         amount: amountInCents,
-        currency: "usd", // Stripe default
+        currency: "usd",
         description: "TEST PAYMENT",
         metadata: { integration_check: "accept_payment" },
     });
@@ -19,7 +19,6 @@ exports.processPayment = catchAsyncError(async (req, res, next) => {
         client_secret: paymentIntent.client_secret
     });
 });
-
 
 exports.sendStripeApi = catchAsyncError((req, res, next) => {
     res.status(200).json({
