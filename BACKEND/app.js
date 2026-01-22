@@ -31,11 +31,13 @@ app.use('/api/v1', payment);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/build')));
-  app.use((req, res) => {
-    res.sendFile(
-      path.resolve(__dirname, '../frontend/build/index.html')
-    );
-  });
+  app.use(express.static(path.join(__dirname, 'frontend/build'), {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('index.html')) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  }
+}));;
 }
 
 app.use(errorMiddleware);
