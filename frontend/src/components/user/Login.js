@@ -9,7 +9,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
     const location = useLocation();
 
     const { loading, error, isAuthenticated } = useSelector(state => state.authState)

@@ -40,6 +40,7 @@ import {
     updateUserFail
 
 } from '../slices/userSlice'
+import { clearCart } from "../slices/cartSlice";
 import axios from 'axios';
 
 export const login = (email, password) => async (dispatch) => {
@@ -47,6 +48,9 @@ export const login = (email, password) => async (dispatch) => {
         try {
             dispatch(loginRequest())
             const { data }  = await axios.post(`/api/v1/login`,{email,password});
+            dispatch(clearCart());
+            localStorage.removeItem("cartItems");
+            localStorage.removeItem("shippingInfo");
             dispatch(loginSuccess(data))
         } catch (error) {
             dispatch(loginFail(error.response.data.message))
@@ -86,16 +90,19 @@ export const loadUser = () => async (dispatch) => {
 }
 
 
-export const logout =  async (dispatch) => {
+export const logout = () => async (dispatch) => {
+  try {
+    await axios.get(`/api/v1/logout`);
 
-    try {
-        await axios.get(`/api/v1/logout`);
-        dispatch(logoutSuccess())
-    } catch (error) {
-        dispatch(logoutFail)
-    }
+    dispatch(logoutSuccess());
+    dispatch(clearCart());
 
-}
+    localStorage.removeItem("cartItems");
+    localStorage.removeItem("shippingInfo");
+  } catch (error) {
+    dispatch(logoutFail(error.response?.data?.message));
+  }
+};
 
 export const updateProfile = (userData) => async (dispatch) => {
 
