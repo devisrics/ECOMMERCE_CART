@@ -5,6 +5,8 @@ import { clearAuthError } from '../../slices/authSlice'
 import MetaData from '../layouts/MetaData';
 import { toast } from 'react-toastify';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { clearCart } from "../../slices/cartSlice";
+
  export default function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -21,19 +23,24 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
     }
 
     useEffect(() => {
-        if(isAuthenticated) {
-            navigate(redirect)
+        dispatch(clearCart());
+        localStorage.removeItem("cartItems");
+        localStorage.removeItem("shippingInfo");
+        }, [dispatch]);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate(redirect);
         }
 
-        if(error)  {
+        if (error) {
             toast(error, {
-                position: 'bottom-center',
-                type: 'error',
-                onOpen: ()=> { dispatch(clearAuthError) }
-            })
-            return
+            position: "bottom-center",
+            type: "error",
+            });
+            dispatch(clearAuthError());
         }
-    },[error, isAuthenticated, dispatch, navigate])
+        }, [error, isAuthenticated, dispatch, navigate, redirect]);
 
     return (
         <Fragment>
