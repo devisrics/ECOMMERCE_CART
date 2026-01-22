@@ -16,17 +16,19 @@ export default function ConfirmOrder() {
     const totalPrice = Number((itemsPrice + shippingPrice + taxPrice).toFixed(2));
 
     const processPayment = () => {
-        const orderInfo = {
-            orderItems: cartItems,       
-            shippingInfo,                
-            itemsPrice,
-            shippingPrice,
-            taxPrice,
-            totalPrice
-        };
-        sessionStorage.setItem('orderInfo', JSON.stringify(orderInfo));
-        navigate('/payment');
+    const orderInfo = {
+        orderItems: cartItems,       
+        shippingInfo,                
+        itemsPrice,
+        shippingPrice,
+        taxPrice,
+        totalPrice: Math.round((itemsPrice + shippingPrice + taxPrice) * 100) 
     };
+    sessionStorage.setItem('orderInfo', JSON.stringify(orderInfo));
+    navigate('/payment');
+};
+
+
 
     useEffect(() => {
         validateShipping(shippingInfo, navigate);
