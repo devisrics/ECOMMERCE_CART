@@ -6,7 +6,7 @@ const productsSlice = createSlice({
     initialState: {
         loading: false
     },
-    reducers: {
+    reducers: { 
         productsRequest(state, action){
             return {
                 loading: true

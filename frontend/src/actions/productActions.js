@@ -28,7 +28,7 @@ export const getProducts = (keyword, price, category, rating, currentPage) => as
         dispatch(productsFail(error.response.data.message))
     }
     
-}
+} 
 
 
 export const getProduct = id => async (dispatch) => {

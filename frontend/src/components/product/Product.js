@@ -25,5 +25,5 @@ export default function Product ({product, col}) {
                 </div>
             </div>
         </div>
-    )
+    ) 
 }

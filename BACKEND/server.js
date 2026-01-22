@@ -1,27 +1,28 @@
-const dotenv = require('dotenv');
-const path = require('path');
-
-dotenv.config({ path: path.resolve(__dirname, 'config/config.env') });
-
 const app = require('./app');
+const path = require('path');
 const connectDatabase = require('./config/database');
+
 
 connectDatabase();
 
-const PORT = process.env.PORT || 8000;
+const server = app.listen(process.env.PORT,()=>{
+    console.log(`My Server listening to the port: ${process.env.PORT} in  ${process.env.NODE_ENV} `)
+})
 
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-});
+process.on('unhandledRejection',(err)=>{
+    console.log(`Error: ${err.message}`);
+    console.log('Shutting down the server due to unhandled rejection error');
+    server.close(()=>{
+        process.exit(1);
+    })
+})
 
-process.on('unhandledRejection', err => {
-  console.error(err.message);
-  server.close(() => {
-    process.exit(1);
-  });
-});
+process.on('uncaughtException',(err)=>{
+    console.log(`Error: ${err.message}`);
+    console.log('Shutting down the server due to uncaught exception error');
+    server.close(()=>{
+        process.exit(1);
+    })
+})
 
-process.on('uncaughtException', err => {
-  console.error(err.message);
-  process.exit(1);
-});
+

@@ -1,87 +1,82 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { resetPassword } from "../../actions/userActions";
-import { clearAuthError, clearPasswordReset } from "../../slices/authSlice";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useEffect, useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetPassword, clearAuthError } from '../../actions/userActions';
+import {useNavigate, useParams} from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function ResetPassword() {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const dispatch = useDispatch();
+    const { isAuthenticated, error }  = useSelector(state => state.authState)
+    const navigate = useNavigate();
+    const { token } = useParams();
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { token } = useParams();
-
-  const { loading, error, isPasswordReset } = useSelector(
-    (state) => state.authState
-  );
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match", { position: "bottom-center" });
-      return;
+    const submitHandler  = (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('password', password);
+        formData.append('confirmPassword', confirmPassword);
+        
+        dispatch(resetPassword(formData, token))
     }
 
-    dispatch(resetPassword(token, { password, confirmPassword }));
-  };
+    useEffect(()=> {
+        if(isAuthenticated) {
+            toast('Password Reset Success!', {
+                type: 'success',
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            navigate('/')
+            return;
+        }
+        if(error)  {
+            toast(error, {
+                position: toast.POSITION.BOTTOM_CENTER,
+                type: 'error',
+                onOpen: ()=> { dispatch(clearAuthError) }
+            })
+            return
+        }
+    },[isAuthenticated, error, dispatch, navigate])
 
-  useEffect(() => {
-    if (isPasswordReset) {
-      toast.success("Password reset successful", { position: "bottom-center" });
-      dispatch(clearPasswordReset());
-      navigate("/login");
-    }
+    return (
+        <div className="row wrapper">
+            <div className="col-10 col-lg-5">
+                <form onSubmit={submitHandler} className="shadow-lg">
+                    <h1 className="mb-3">New Password</h1>
 
-    if (error) {
-      toast.error(error, { position: "bottom-center" });
-      dispatch(clearAuthError());
-    }
-  }, [dispatch, error, isPasswordReset, navigate]);
+                    <div className="form-group">
+                        <label htmlFor="password_field">Password</label>
+                        <input
+                            type="password"
+                            id="password_field"
+                            className="form-control"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                    </div>
 
-  return (
-    <div className="row wrapper">
-      <div className="col-10 col-lg-5">
-        <form className="shadow-lg" onSubmit={submitHandler}>
-          <h1 className="mb-3">Reset Password</h1>
+                    <div className="form-group">
+                        <label htmlFor="confirm_password_field">Confirm Password</label>
+                        <input
+                            type="password"
+                            id="confirm_password_field"
+                            className="form-control"
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
+                        />
+                    </div>
 
-          <div className="form-group">
-            <label htmlFor="password_field">New Password</label>
-            <input
-              id="password_field"
-              type="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-            />
-          </div>
+                    <button
+                        id="new_password_button"
+                        type="submit"
+                        className="btn btn-block py-3">
+                        Set Password
+                    </button>
 
-          <div className="form-group">
-            <label htmlFor="confirm_password_field">Confirm Password</label>
-            <input
-              id="confirm_password_field"
-              type="password"
-              className="form-control"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              minLength={6}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="btn btn-block py-3"
-            disabled={loading}
-          >
-            {loading ? "Updating..." : "Set Password"}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+                </form>
+            </div>
+        </div>
+    )
 }

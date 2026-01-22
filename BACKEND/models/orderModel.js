@@ -14,11 +14,7 @@ const orderSchema = mongoose.Schema({
             type: String,
             required: true
         },
-        state: { 
-            type: String, 
-            required: true 
-        },
-        phoneNumber: {
+        phoneNo: {
             type: String,
             required: true
         },
@@ -54,6 +50,7 @@ const orderSchema = mongoose.Schema({
             required: true,
             ref: 'Product'
         }
+
     }],
     itemsPrice: {
         type: Number,
@@ -94,13 +91,14 @@ const orderSchema = mongoose.Schema({
     orderStatus: {
         type: String,
         required: true,
-        default: 'processing'
+        default: 'Processing'
     },
     createdAt: {
         type: Date,
         default: Date.now
     }
-});
+})
 
-let ordermodel = mongoose.model('Order', orderSchema);
-module.exports = ordermodel;
+let orderModel = mongoose.model('Order', orderSchema);
+
+module.exports = orderModel;

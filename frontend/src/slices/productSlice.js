@@ -8,7 +8,7 @@ const productSlice = createSlice({
         product: {},
         isReviewSubmitted: false,
         isProductCreated: false,
-        isProductDeleted: false,
+        isProductDeleted: false, 
         isProductUpdated: false,
         isReviewDeleted: false,
         reviews: []

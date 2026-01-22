@@ -26,7 +26,7 @@ export  default function ProductSearch(){
         'Electronics',
         'Mobile Phones',
         'Laptops',
-        'Accessories',
+        'Accessories', 
         'Headphones',
         'Food',
         'Books',
