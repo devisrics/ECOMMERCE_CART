@@ -32,29 +32,20 @@ app.use('/api/v1', products);
 app.use('/api/v1', order);
 app.use('/api/v1', payment);
 
-// ----- TEST route -----
-app.get('/api/v1/test', (req, res) => {
-  res.status(200).json({ message: 'API is working!' });
-});
-
-// ----- Production React build catch-all -----
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(__dirname, '../frontend/build');
 
-  // Serve static files
   app.use(express.static(buildPath));
 
   // Catch-all for React routes (skip API)
   app.use((req, res, next) => {
     if (req.path.startsWith('/api/v1')) {
-      return next(); // skip API routes
+      return next(); 
     }
     res.set('Cache-Control', 'no-store');
     res.sendFile(path.resolve(buildPath, 'index.html'));
   });
 }
-
-// ----- Error middleware -----
 app.use(errorMiddleware);
 
 module.exports = app;
