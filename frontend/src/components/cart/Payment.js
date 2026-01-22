@@ -9,7 +9,7 @@ import {
     useElements,
     useStripe
 } from "@stripe/react-stripe-js";
-import CheckoutSteps from "./CheckoutStep";
+import CheckoutSteps from "./CheckoutSteps";
 import { createOrder } from "../../actions/orderActions";
 import { toast } from "react-toastify";
 
