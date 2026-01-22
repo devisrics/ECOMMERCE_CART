@@ -23,7 +23,7 @@ const {
   registerUser,
   loginUser,
   logoutUser,
-  forgotpassword,
+  forgotPassword,
   resetPassword,
   getUserProfile,
   changePassword,
@@ -44,7 +44,7 @@ const router = express.Router();
 router.post('/register', upload.single('avatar'), registerUser);
 router.post('/login', loginUser);
 router.post('/logout', isAuthenticatedUser, logoutUser);
-router.post('/password/forgot', forgotpassword);
+router.post('/password/forgot', forgotPassword);
 router.put('/password/reset/:token', resetPassword);
 router.get('/myprofile', isAuthenticatedUser, getUserProfile);
 router.put('/password/change', isAuthenticatedUser, changePassword);
