@@ -2,8 +2,9 @@ const catchAsyncError = require('../middlewares/catchAsyncError');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.processPayment = catchAsyncError(async (req, res, next) => {
+    const rawAmount = Number(req.body.amount)
     const paymentIntent = await stripe.paymentIntents.create({
-    amount: Math.round(req.body.amount *100), 
+    amount: Math.round(rawAmount *100), 
     currency: "usd",
     description: "TEST PAYMENT",
     metadata: { integration_check: "accept_payment" },
