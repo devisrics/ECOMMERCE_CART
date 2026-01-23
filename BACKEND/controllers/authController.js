@@ -94,7 +94,7 @@ exports.forgotPassword = catchAsyncError( async (req, res, next)=>{
     try{
         sendEmail({
             email: user.email,
-            subject: "JVLcart Password Recovery",
+            subject: "cart Password Recovery",
             message
         })
 
@@ -113,31 +113,35 @@ exports.forgotPassword = catchAsyncError( async (req, res, next)=>{
 })  
 
 //Reset Password - /api/v1/password/reset/:token
-exports.resetPassword = catchAsyncError( async (req, res, next) => {
-   const resetPasswordToken =  crypto.createHash('sha256').update(req.params.token).digest('hex'); 
+exports.resetPassword = catchAsyncError(async (req, res, next) => {
+    const resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(req.params.token)
+        .digest('hex');
 
-    const user = await User.findOne( {
+    const user = await User.findOne({
         resetPasswordToken,
-        resetPasswordTokenExpire: {
-            $gt : Date.now()
-        }
-    } )
+        resetPasswordTokenExpire: { $gt: Date.now() }
+    });
 
-    if(!user) {
-        return next(new ErrorHandler('Password reset token is invalid or expired'));
+    if (!user) {
+        return next(new ErrorHandler('Password reset token is invalid or expired', 400));
     }
 
-    if( req.body.password !== req.body.confirmPassword) {
-        return next(new ErrorHandler('Password does not match'));
+    const { password, confirmPassword } = req.body;
+    if (!password || !confirmPassword) {
+        return next(new ErrorHandler('Please provide both password and confirm password', 400));
     }
-
-    user.password = req.body.password;
+    if (password !== confirmPassword) {
+        return next(new ErrorHandler('Passwords do not match', 400));
+    }
+    user.password = password;
     user.resetPasswordToken = undefined;
     user.resetPasswordTokenExpire = undefined;
-    await user.save({validateBeforeSave: false})
-    sendToken(user, 201, res)
+    await user.save(); 
+    sendToken(user, 200, res);
+});
 
-})
 
 //Get User Profile - /api/v1/myprofile
 exports.getUserProfile = catchAsyncError(async (req, res, next) => {
