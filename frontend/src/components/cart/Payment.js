@@ -1,13 +1,11 @@
 import { useElements, useStripe, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { orderCompleted } from "../../slices/cartSlice";
-import { validateShipping } from "../cart/Shipping";
 import { createOrder } from "../../actions/orderActions";
-import { clearError as clearOrderError } from "../../slices/orderSlice";
 
 export default function Payment() {
   const stripe = useStripe();
@@ -21,18 +19,6 @@ export default function Payment() {
   const { items: cartItems, shippingInfo } = useSelector(
     (state) => state.cartState
   );
-  const { error: orderError } = useSelector((state) => state.orderState);
-
-  useEffect(() => {
-    validateShipping(shippingInfo, navigate);
-
-    if (orderError) {
-      toast.error(orderError, {
-        position: toast.POSITION.BOTTOM_CENTER,
-        onOpen: () => dispatch(clearOrderError()),
-      });
-    }
-  }, [orderError, shippingInfo, navigate, dispatch]);
 
   const order = {
     orderItems: cartItems,
@@ -45,14 +31,13 @@ export default function Payment() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
     if (!stripe || !elements) return;
 
     setProcessing(true);
 
     try {
       const { data } = await axios.post("/api/v1/payment/process", {
-        amount: Math.round(orderInfo.totalPrice * 100),
+        amount: Math.round(orderInfo.totalPrice * 100), // amount in cents
       });
 
       const result = await stripe.confirmCardPayment(data.client_secret, {
@@ -67,12 +52,12 @@ export default function Payment() {
 
       if (result.error) {
         toast.error(result.error.message, {
-          position: toast.POSITION.BOTTOM_CENTER,
+          position: "bottom-center",
         });
         setProcessing(false);
         return;
       }
-
+      
       if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
         order.paymentInfo = {
           id: result.paymentIntent.id,
@@ -83,7 +68,7 @@ export default function Payment() {
         dispatch(createOrder(order));
 
         toast.success("Payment Successful!", {
-          position: toast.POSITION.BOTTOM_CENTER,
+          position: "bottom-center",
         });
 
         navigate("/order/success");
@@ -91,7 +76,7 @@ export default function Payment() {
     } catch (error) {
       console.error(error);
       toast.error("Payment failed. Please try again.", {
-        position: toast.POSITION.BOTTOM_CENTER,
+        position: "bottom-center",
       });
       setProcessing(false);
     }
@@ -101,7 +86,7 @@ export default function Payment() {
     <div className="row wrapper">
       <div className="col-10 col-lg-5">
         <form onSubmit={submitHandler} className="shadow-lg">
-          <h1 className="mb-4">Card Info</h1>
+          <h1 className="mb-4">Card Info (Test Mode)</h1>
 
           <div className="form-group mb-4">
             <CardElement
@@ -118,9 +103,16 @@ export default function Payment() {
             className="btn btn-block py-3"
             disabled={processing}
           >
-            {processing ? "Processing..." : `Pay $${orderInfo.totalPrice}`}
+            {processing
+              ? "Processing..."
+              : `Pay $${orderInfo.totalPrice} (Test)`}
           </button>
         </form>
+
+        <p className="mt-3 text-muted">
+          Use test card: <strong>4242 4242 4242 4242</strong>, any future
+          expiry, any CVC
+        </p>
       </div>
     </div>
   );

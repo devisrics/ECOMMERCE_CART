@@ -41,7 +41,6 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 
-// ✅ Load Stripe public key from .env
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API_KEY);
 
 function App() {
