@@ -1,7 +1,7 @@
 const app = require('./app');
 const connectDatabase = require('./config/database');
 
-connectDatabase(); // only connect once
+connectDatabase();
 
 const PORT = process.env.PORT || 8000;
 
@@ -11,12 +11,12 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 
 process.on('unhandledRejection', (err) => {
   console.log(`Error: ${err.message}`);
-  console.log('Shutting down the server due to unhandled rejection error');
+  console.log('Shutting down the server due to unhandled rejection');
   server.close(() => process.exit(1));
 });
 
 process.on('uncaughtException', (err) => {
   console.log(`Error: ${err.message}`);
-  console.log('Shutting down the server due to uncaught exception error');
+  console.log('Shutting down the server due to uncaught exception');
   server.close(() => process.exit(1));
 });
