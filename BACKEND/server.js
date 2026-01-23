@@ -1,25 +1,29 @@
 const app = require('./app');
 const connectDatabase = require('./config/database');
-const Product = require('./models/productModel');
-const products = require('./data/products.json');
+
 
 connectDatabase();
 
 const PORT = process.env.PORT || 8000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
-const seedProducts = async () => {
-    await Product.deleteMany();
-    await Product.insertMany(products);  // <-- fixed here
-    console.log('Products seeded!');
-};
 
-seedProducts()
-  .then(() => {
-      app.listen(PORT, '0.0.0.0', () => {
-          console.log(`Server running on port ${PORT}`);
-      });
-  })
-  .catch(err => {
-      console.error('Seeding failed:', err);
-      process.exit(1); // exit if seeding fails
-  });
+process.on('unhandledRejection',(err)=>{
+    console.log(`Error: ${err.message}`);
+    console.log('Shutting down the server due to unhandled rejection error');
+    server.close(()=>{
+        process.exit(1);
+    })
+})
+
+process.on('uncaughtException',(err)=>{
+    console.log(`Error: ${err.message}`);
+    console.log('Shutting down the server due to uncaught exception error');
+    server.close(()=>{
+        process.exit(1);
+    })
+})
+
+
