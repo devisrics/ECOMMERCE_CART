@@ -27,9 +27,10 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(frontendBuildPath));
 
   // Serve React routing (index.html) for all other requests
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  app.get(/^\/(?!api).*/, (req, res) => {
+     res.sendFile(path.join(frontendBuildPath, 'index.html'));
   });
+
 }
 
 // Error handling middleware
