@@ -1,35 +1,43 @@
 const express = require('express');
 const app = express();
-const errorMiddleware = require('./middlewares/error');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const dotenv = require('dotenv');
+const errorMiddleware = require('./middlewares/error');
 
-dotenv.config({ path: path.join(__dirname, "config/config.env") });
+// Load environment variables
+dotenv.config({ path: path.join(__dirname, 'config/config.env') });
 
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes
+// API Routes
 app.use('/api/v1', require('./routes/product'));
 app.use('/api/v1', require('./routes/auth'));
 app.use('/api/v1', require('./routes/order'));
 app.use('/api/v1', require('./routes/payment'));
 
-// Serve React in production
-if (process.env.NODE_ENV === "production") {
+// Serve React frontend in production
+if (process.env.NODE_ENV === 'production') {
   const frontendBuildPath = path.join(__dirname, '../frontend/build');
 
+  // Serve static files
   app.use(express.static(frontendBuildPath));
 
-  // Must be last route
+  // Serve JS/CSS files correctly
+  app.get('/static/*', (req, res) => {
+    res.sendFile(path.join(frontendBuildPath, req.path));
+  });
+
+  // Serve React routing (index.html) for all other requests
   app.get('*', (req, res) => {
     res.sendFile(path.join(frontendBuildPath, 'index.html'));
   });
 }
 
-// Error middleware
+// Error handling middleware
 app.use(errorMiddleware);
 
 module.exports = app;
