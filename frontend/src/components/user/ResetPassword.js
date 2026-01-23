@@ -8,7 +8,7 @@ export default function ResetPassword() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const dispatch = useDispatch();
-    const { isAuthenticated, error }  = useSelector(state => state.authState)
+    const { success, error }  = useSelector(state => state.authState)
     const navigate = useNavigate();
     const { token } = useParams();
 
@@ -22,23 +22,23 @@ export default function ResetPassword() {
     }
 
     useEffect(()=> {
-        if(isAuthenticated) {
-            toast('Password Reset Success!', {
-                type: 'success',
-                position: "bottom-center"
-            })
-            navigate('/')
-            return;
-        }
-        if(error)  {
-            toast(error, {
-                position: "bottom-center",
-                type: 'error',
-                onOpen: ()=> { dispatch(clearAuthError()) }
-            })
-            return
-        }
-    },[isAuthenticated, error, dispatch, navigate])
+    if(success) {
+        toast('Password Reset Success!', {
+            type: 'success',
+            position: "bottom-center"
+        })
+        navigate('/login')
+    }
+
+    if(error)  {
+        toast(error, {
+            position: "bottom-center",
+            type: 'error',
+            onOpen: ()=> { dispatch(clearAuthError()) }
+        })
+    }
+}, [success, error, dispatch, navigate])
+
 
     return (
         <div className="row wrapper">

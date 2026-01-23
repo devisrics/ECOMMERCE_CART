@@ -167,8 +167,7 @@ const authSlice = createSlice({
             return {
                 ...state,
                 loading: false,
-                isAuthenticated: true,
-                user: action.payload.user
+                success:true
             }
         },
         resetPasswordFail(state, action){
