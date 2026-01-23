@@ -114,7 +114,6 @@ exports.forgotPassword = catchAsyncError( async (req, res, next)=>{
 
 //Reset Password - /api/v1/password/reset/:token
 exports.resetPassword = catchAsyncError(async (req, res, next) => {
-    console.log("✅ Reset password endpoint hit", req.body); 
     const resetPasswordToken = crypto
         .createHash('sha256')
         .update(req.params.token)

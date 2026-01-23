@@ -37,7 +37,7 @@ export default function Payment() {
 
     try {
       const { data } = await axios.post("/api/v1/payment/process", {
-        amount: Math.round(orderInfo.totalPrice * 100), // amount in cents
+        amount: Math.round(orderInfo.totalPrice * 100), 
       });
 
       const result = await stripe.confirmCardPayment(data.client_secret, {

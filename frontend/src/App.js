@@ -50,7 +50,6 @@ function App() {
     // Load user on app start
     store.dispatch(loadUser);
 
-    // Optionally fetch backend key if needed
     async function getStripeApiKey() {
       try {
         const { data } = await axios.get('/api/v1/stripeapi');
