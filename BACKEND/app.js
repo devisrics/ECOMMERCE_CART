@@ -26,11 +26,6 @@ if (process.env.NODE_ENV === 'production') {
   // Serve static files
   app.use(express.static(frontendBuildPath));
 
-  // Serve JS/CSS files correctly
-  app.get('/static/*', (req, res) => {
-    res.sendFile(path.join(frontendBuildPath, req.path));
-  });
-
   // Serve React routing (index.html) for all other requests
   app.get('*', (req, res) => {
     res.sendFile(path.join(frontendBuildPath, 'index.html'));
