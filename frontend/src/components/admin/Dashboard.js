@@ -28,8 +28,6 @@ export default function Dashboard () {
         })
     }
 
-
-
     useEffect( () => {
        dispatch(getAdminProducts);
        dispatch(getUsers);
@@ -38,77 +36,82 @@ export default function Dashboard () {
 
 
     return (
-        <div className="row">
-            <div className="col-12 col-md-2">
-                    <Sidebar/>
+      <div style={{ display: "flex", minHeight: "100vh" }}>
+      {/* Sidebar */}
+      <div style={{ width: "220px" }}>
+        <Sidebar />
+      </div>
+
+      {/* Main Dashboard Content */}
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: "40px 20px",
+        }}
+      >
+        <h1 className="my-4">Dashboard</h1>
+
+        {/* Total Amount Card */}
+        <div style={{ width: "100%", maxWidth: "800px", marginBottom: "30px" }}>
+          <div className="card text-white bg-primary o-hidden h-100">
+            <div className="card-body text-center card-font-size">
+              Total Amount<br />
+              <b>${totalAmount}</b>
             </div>
-            <div className="col-12 col-md-10">
-                <h1 className="my-4">Dashboard</h1>
-                <div className="row pr-4">
-                    <div className="col-xl-12 col-sm-12 mb-3">
-                        <div className="card text-white bg-primary o-hidden h-100">
-                            <div className="card-body">
-                                <div className="text-center card-font-size">Total Amount<br /> <b>${totalAmount}</b>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row pr-4">
-                    <div className="col-xl-3 col-sm-6 mb-3">
-                        <div className="card text-white bg-success o-hidden h-100">
-                            <div className="card-body">
-                                <div className="text-center card-font-size">Products<br /> <b>{products.length}</b></div>
-                            </div>
-                            <Link className="card-footer text-white clearfix small z-1" to="/admin/products">
-                                <span className="float-left">View Details</span>
-                                <span className="float-right">
-                                    <i className="fa fa-angle-right"></i>
-                                </span>
-                            </Link>
-                        </div>
-                    </div>
-
-
-                    <div className="col-xl-3 col-sm-6 mb-3">
-                        <div className="card text-white bg-danger o-hidden h-100">
-                            <div className="card-body">
-                                <div className="text-center card-font-size">Orders<br /> <b>{adminOrders.length}</b></div>
-                            </div>
-                            <Link className="card-footer text-white clearfix small z-1" to="/admin/orders">
-                                <span className="float-left">View Details</span>
-                                <span className="float-right">
-                                    <i className="fa fa-angle-right"></i>
-                                </span>
-                            </Link>
-                        </div>
-                    </div>
-
-
-                    <div className="col-xl-3 col-sm-6 mb-3">
-                        <div className="card text-white bg-info o-hidden h-100">
-                            <div className="card-body">
-                                <div className="text-center card-font-size">Users<br /> <b>{users.length}</b></div>
-                            </div>
-                            <Link className="card-footer text-white clearfix small z-1" to="/admin/users">
-                                <span className="float-left">View Details</span>
-                                <span className="float-right">
-                                    <i className="fa fa-angle-right"></i>
-                                </span>
-                            </Link>
-                        </div>
-                    </div>
-
-
-                    <div className="col-xl-3 col-sm-6 mb-3">
-                        <div className="card text-white bg-warning o-hidden h-100">
-                            <div className="card-body">
-                                <div className="text-center card-font-size">Out of Stock<br /> <b>{outOfStock}</b></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+
+        {/* Cards Row */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "20px",
+            flexWrap: "wrap",
+            maxWidth: "800px",
+          }}
+        >
+          {/* Products */}
+          <div className="card text-white bg-success o-hidden h-100">
+            <div className="card-body text-center card-font-size">
+              Products<br /> <b>{products.length}</b>
+            </div>
+            <Link className="card-footer text-white" to="/admin/products">
+              View Details <i className="fa fa-angle-right"></i>
+            </Link>
+          </div>
+
+          {/* Orders */}
+          <div className="card text-white bg-danger o-hidden h-100">
+            <div className="card-body text-center card-font-size">
+              Orders<br /> <b>{adminOrders.length}</b>
+            </div>
+            <Link className="card-footer text-white" to="/admin/orders">
+              View Details <i className="fa fa-angle-right"></i>
+            </Link>
+          </div>
+
+          {/* Users */}
+          <div className="card text-white bg-info o-hidden h-100">
+            <div className="card-body text-center card-font-size">
+              Users<br /> <b>{users.length}</b>
+            </div>
+            <Link className="card-footer text-white" to="/admin/users">
+              View Details <i className="fa fa-angle-right"></i>
+            </Link>
+          </div>
+
+          {/* Out of Stock */}
+          <div className="card text-white bg-warning o-hidden h-100">
+            <div className="card-body text-center card-font-size">
+              Out of Stock<br /> <b>{outOfStock}</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     )
 }
