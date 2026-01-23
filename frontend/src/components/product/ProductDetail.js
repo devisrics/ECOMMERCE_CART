@@ -53,14 +53,14 @@ export default function ProductDetail () {
             handleClose()
             toast('Review Submitted successfully',{
                 type: 'success',
-                position: toast.POSITION.BOTTOM_CENTER,
+                position: "bottom-center",
                 onOpen: () => dispatch(clearReviewSubmitted())
             })
             
         }
         if(error)  {
             toast(error, {
-                position: toast.POSITION.BOTTOM_CENTER,
+                position: "bottom-center",
                 type: 'error',
                 onOpen: ()=> { dispatch(clearError()) }
             })
@@ -122,7 +122,7 @@ export default function ProductDetail () {
                         dispatch(addCartItem(product._id, quantity))
                         toast('Cart Item Added!',{
                             type: 'success',
-                            position: toast.POSITION.BOTTOM_CENTER
+                            position: "bottom-center"
                         })
                     }}
                      className="btn btn-primary d-inline ml-4"
