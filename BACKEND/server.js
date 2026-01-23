@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 8000;
 
 const seedProducts = async () => {
     await Product.deleteMany();
-    await Product.insertMany(require(products));
+    await Product.insertMany(products);  // <-- fixed here
     console.log('Products seeded!');
 };
 
