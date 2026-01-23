@@ -36,82 +36,84 @@ export default function Dashboard () {
 
 
     return (
-      <div style={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar */}
-      <div style={{ width: "220px" }}>
-        <Sidebar />
-      </div>
-
-      {/* Main Dashboard Content */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "40px 20px",
-        }}
-      >
-        <h1 className="my-4">Dashboard</h1>
-
-        {/* Total Amount Card */}
-        <div style={{ width: "100%", maxWidth: "800px", marginBottom: "30px" }}>
-          <div className="card text-white bg-primary o-hidden h-100">
-            <div className="card-body text-center card-font-size">
-              Total Amount<br />
-              <b>${totalAmount}</b>
-            </div>
-          </div>
+        <div style={{ display: "flex", minHeight: "100vh" }}>
+        {/* Sidebar */}
+        <div style={{ width: "220px" }}>
+            <Sidebar />
         </div>
 
-        {/* Cards Row */}
+        {/* Main Content */}
         <div
-          style={{
+            style={{
+            flex: 1,
             display: "flex",
-            justifyContent: "center",
-            gap: "20px",
-            flexWrap: "wrap",
-            maxWidth: "800px",
-          }}
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "40px 20px",
+            }}
         >
-          {/* Products */}
-          <div className="card text-white bg-success o-hidden h-100">
-            <div className="card-body text-center card-font-size">
-              Products<br /> <b>{products.length}</b>
-            </div>
-            <Link className="card-footer text-white" to="/admin/products">
-              View Details <i className="fa fa-angle-right"></i>
-            </Link>
-          </div>
+            <h1 className="my-4">Dashboard</h1>
 
-          {/* Orders */}
-          <div className="card text-white bg-danger o-hidden h-100">
-            <div className="card-body text-center card-font-size">
-              Orders<br /> <b>{adminOrders.length}</b>
+            {/* Total Amount Card */}
+            <div style={{ width: "100%", maxWidth: "900px", marginBottom: "30px" }}>
+            <div className="card text-white bg-primary o-hidden h-100 text-center">
+                <div className="card-body card-font-size">
+                Total Amount<br />
+                <b>${totalAmount}</b>
+                </div>
             </div>
-            <Link className="card-footer text-white" to="/admin/orders">
-              View Details <i className="fa fa-angle-right"></i>
-            </Link>
-          </div>
+            </div>
 
-          {/* Users */}
-          <div className="card text-white bg-info o-hidden h-100">
-            <div className="card-body text-center card-font-size">
-              Users<br /> <b>{users.length}</b>
+            {/* Cards Row */}
+            <div
+            style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                width: "100%",
+                maxWidth: "900px",
+                gap: "20px",
+            }}
+            >
+            {/* Products */}
+            <div style={{ flex: "1 1 200px" }} className="card text-white bg-success o-hidden h-100 text-center">
+                <div className="card-body card-font-size">
+                Products<br /> <b>{products.length}</b>
+                </div>
+                <Link className="card-footer text-white" to="/admin/products">
+                View Details <i className="fa fa-angle-right"></i>
+                </Link>
             </div>
-            <Link className="card-footer text-white" to="/admin/users">
-              View Details <i className="fa fa-angle-right"></i>
-            </Link>
-          </div>
 
-          {/* Out of Stock */}
-          <div className="card text-white bg-warning o-hidden h-100">
-            <div className="card-body text-center card-font-size">
-              Out of Stock<br /> <b>{outOfStock}</b>
+            {/* Orders */}
+            <div style={{ flex: "1 1 200px" }} className="card text-white bg-danger o-hidden h-100 text-center">
+                <div className="card-body card-font-size">
+                Orders<br /> <b>{adminOrders.length}</b>
+                </div>
+                <Link className="card-footer text-white" to="/admin/orders">
+                View Details <i className="fa fa-angle-right"></i>
+                </Link>
             </div>
-          </div>
+
+            {/* Users */}
+            <div style={{ flex: "1 1 200px" }} className="card text-white bg-info o-hidden h-100 text-center">
+                <div className="card-body card-font-size">
+                Users<br /> <b>{users.length}</b>
+                </div>
+                <Link className="card-footer text-white" to="/admin/users">
+                View Details <i className="fa fa-angle-right"></i>
+                </Link>
+            </div>
+
+            {/* Out of Stock */}
+            <div style={{ flex: "1 1 200px" }} className="card text-white bg-warning o-hidden h-100 text-center">
+                <div className="card-body card-font-size">
+                Out of Stock<br /> <b>{outOfStock}</b>
+                </div>
+            </div>
+            </div>
         </div>
-      </div>
-    </div>
+        </div>
+
     )
 }
