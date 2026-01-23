@@ -68,15 +68,15 @@ export default function Dashboard () {
             <div
             style={{
                 display: "flex",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
+                gap: "20px",
                 width: "100%",
                 maxWidth: "900px",
-                gap: "20px",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
             }}
             >
             {/* Products */}
-            <div style={{ flex: "1 1 200px" }} className="card text-white bg-success o-hidden h-100 text-center">
+            <div style={{ flex: "1 1 200px" }} className="card text-white bg-success h-100 text-center">
                 <div className="card-body card-font-size">
                 Products<br /> <b>{products.length}</b>
                 </div>
@@ -86,7 +86,7 @@ export default function Dashboard () {
             </div>
 
             {/* Orders */}
-            <div style={{ flex: "1 1 200px" }} className="card text-white bg-danger o-hidden h-100 text-center">
+            <div style={{ flex: "1 1 200px" }} className="card text-white bg-danger h-100 text-center">
                 <div className="card-body card-font-size">
                 Orders<br /> <b>{adminOrders.length}</b>
                 </div>
@@ -96,7 +96,7 @@ export default function Dashboard () {
             </div>
 
             {/* Users */}
-            <div style={{ flex: "1 1 200px" }} className="card text-white bg-info o-hidden h-100 text-center">
+            <div style={{ flex: "1 1 200px" }} className="card text-white bg-info h-100 text-center">
                 <div className="card-body card-font-size">
                 Users<br /> <b>{users.length}</b>
                 </div>
@@ -106,14 +106,13 @@ export default function Dashboard () {
             </div>
 
             {/* Out of Stock */}
-            <div style={{ flex: "1 1 200px" }} className="card text-white bg-warning o-hidden h-100 text-center">
+            <div style={{ flex: "1 1 200px" }} className="card text-white bg-warning h-100 text-center">
                 <div className="card-body card-font-size">
                 Out of Stock<br /> <b>{outOfStock}</b>
                 </div>
             </div>
             </div>
         </div>
-        </div>
-
+    </div>
     )
 }
