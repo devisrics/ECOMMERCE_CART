@@ -36,83 +36,89 @@ export default function Dashboard () {
 
 
     return (
-        <div style={{ display: "flex", minHeight: "100vh" }}>
-        {/* Sidebar */}
-        <div style={{ width: "220px" }}>
-            <Sidebar />
+        <div style={{ display: "flex", minHeight: "100vh", background: "#f4f6f9" }}>
+  {/* Sidebar */}
+  <div style={{ width: "220px" }}>
+    <Sidebar />
+  </div>
+
+  {/* Main Content */}
+  <div
+    style={{
+      flex: 1,
+      padding: "30px",
+      display: "flex",
+      flexDirection: "column",
+    }}
+  >
+    <h2 style={{ marginBottom: "25px", color: "#333" }}>Dashboard</h2>
+
+    {/* Total Amount */}
+    <div style={{ marginBottom: "30px" }}>
+      <div className="card text-white bg-primary text-center">
+        <div className="card-body card-font-size">
+          Total Amount
+          <br />
+          <strong>${totalAmount}</strong>
         </div>
-
-        {/* Main Content */}
-        <div
-            style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: "40px 20px",
-            }}
-        >
-            <h1 className="my-4">Dashboard</h1>
-
-            {/* Total Amount Card */}
-            <div style={{ width: "100%", maxWidth: "900px", marginBottom: "30px" }}>
-            <div className="card text-white bg-primary o-hidden h-100 text-center">
-                <div className="card-body card-font-size">
-                Total Amount<br />
-                <b>${totalAmount}</b>
-                </div>
-            </div>
-            </div>
-
-            {/* Cards Row */}
-            <div
-            style={{
-                display: "flex",
-                gap: "20px",
-                width: "100%",
-                maxWidth: "900px",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-            }}
-            >
-            {/* Products */}
-            <div style={{ flex: "1 1 200px" }} className="card text-white bg-success h-100 text-center">
-                <div className="card-body card-font-size">
-                Products<br /> <b>{products.length}</b>
-                </div>
-                <Link className="card-footer text-white" to="/admin/products">
-                View Details <i className="fa fa-angle-right"></i>
-                </Link>
-            </div>
-
-            {/* Orders */}
-            <div style={{ flex: "1 1 200px" }} className="card text-white bg-danger h-100 text-center">
-                <div className="card-body card-font-size">
-                Orders<br /> <b>{adminOrders.length}</b>
-                </div>
-                <Link className="card-footer text-white" to="/admin/orders">
-                View Details <i className="fa fa-angle-right"></i>
-                </Link>
-            </div>
-
-            {/* Users */}
-            <div style={{ flex: "1 1 200px" }} className="card text-white bg-info h-100 text-center">
-                <div className="card-body card-font-size">
-                Users<br /> <b>{users.length}</b>
-                </div>
-                <Link className="card-footer text-white" to="/admin/users">
-                View Details <i className="fa fa-angle-right"></i>
-                </Link>
-            </div>
-
-            {/* Out of Stock */}
-            <div style={{ flex: "1 1 200px" }} className="card text-white bg-warning h-100 text-center">
-                <div className="card-body card-font-size">
-                Out of Stock<br /> <b>{outOfStock}</b>
-                </div>
-            </div>
-            </div>
-        </div>
+      </div>
     </div>
+
+    {/* Stats Cards */}
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+        gap: "20px",
+      }}
+    >
+      {/* Products */}
+      <div className="card text-white bg-success text-center">
+        <div className="card-body card-font-size">
+          Products
+          <br />
+          <strong>{products.length}</strong>
+        </div>
+        <Link className="card-footer text-white text-decoration-none" to="/admin/products">
+          View Details <i className="fa fa-angle-right"></i>
+        </Link>
+      </div>
+
+      {/* Orders */}
+      <div className="card text-white bg-danger text-center">
+        <div className="card-body card-font-size">
+          Orders
+          <br />
+          <strong>{adminOrders.length}</strong>
+        </div>
+        <Link className="card-footer text-white text-decoration-none" to="/admin/orders">
+          View Details <i className="fa fa-angle-right"></i>
+        </Link>
+      </div>
+
+      {/* Users */}
+      <div className="card text-white bg-info text-center">
+        <div className="card-body card-font-size">
+          Users
+          <br />
+          <strong>{users.length}</strong>
+        </div>
+        <Link className="card-footer text-white text-decoration-none" to="/admin/users">
+          View Details <i className="fa fa-angle-right"></i>
+        </Link>
+      </div>
+
+      {/* Out of Stock */}
+      <div className="card text-dark bg-warning text-center">
+        <div className="card-body card-font-size">
+          Out of Stock
+          <br />
+          <strong>{outOfStock}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
     )
 }

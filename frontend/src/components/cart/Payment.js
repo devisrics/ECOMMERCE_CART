@@ -105,7 +105,7 @@ export default function Payment() {
           >
             {processing
               ? "Processing..."
-              : `Pay $${orderInfo.totalPrice} (Test)`}
+              : `Pay $${orderInfo.totalPrice}`}
           </button>
         </form>
 
