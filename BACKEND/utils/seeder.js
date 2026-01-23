@@ -3,7 +3,7 @@ const products = require('../data/products.json');
 const connectDatabase = require('../config/database');
 const dotenv = require('dotenv');
 
-dotenv.config({ path: 'backend/config/config.env' });
+dotenv.config({ path: 'BACKEND/config/config.env' });
 connectDatabase();
 
 const seedProducts = async () => {
