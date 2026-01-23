@@ -4,6 +4,7 @@ const connectDatabase = require('./config/database');
 
 connectDatabase();
 
+const PORT = process.env.PORT || 8000;
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
@@ -23,4 +24,6 @@ process.on('uncaughtException', (err) => {
         process.exit(1);
     });
 });
+
+
 
