@@ -86,7 +86,7 @@ export default function Payment() {
     <div className="row wrapper">
       <div className="col-10 col-lg-5">
         <form onSubmit={submitHandler} className="shadow-lg">
-          <h1 className="mb-4">Card Info (Test Mode)</h1>
+          <h1 className="mb-4">Card Info</h1>
 
           <div className="form-group mb-4">
             <CardElement
@@ -109,10 +109,10 @@ export default function Payment() {
           </button>
         </form>
 
-        <p className="mt-3 text-muted">
-          Use test card: <strong>4242 4242 4242 4242</strong>, any future
-          expiry, any CVC
-        </p>
+       <p className="mt-3 text-muted">
+          Card details are securely processed by Stripe
+       </p>
+
       </div>
     </div>
   );
