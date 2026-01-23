@@ -1,41 +1,35 @@
 const express = require('express');
 const app = express();
 const errorMiddleware = require('./middlewares/error');
-const cookieParser = require('cookie-parser')
-const path = require('path')
+const cookieParser = require('cookie-parser');
+const path = require('path');
 const dotenv = require('dotenv');
-dotenv.config({path:path.join(__dirname,"config/config.env")});
 
+dotenv.config({ path: path.join(__dirname, "config/config.env") });
 
 app.use(express.json());
 app.use(cookieParser());
-app.use('/uploads', express.static(path.join(__dirname,'uploads') ) )
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const products = require('./routes/product')
-const auth = require('./routes/auth')
-const order = require('./routes/order')
-const payment = require('./routes/payment')
+// Routes
+app.use('/api/v1', require('./routes/product'));
+app.use('/api/v1', require('./routes/auth'));
+app.use('/api/v1', require('./routes/order'));
+app.use('/api/v1', require('./routes/payment'));
 
-app.use('/api/v1/',products);
-app.use('/api/v1/',auth);
-app.use('/api/v1/',order);
-app.use('/api/v1/',payment);
-
+// Serve React in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, '../frontend/build'), {
-    etag: true,
-    lastModified: true,
-    acceptRanges: true,
-    cacheControl: true,
-  }));
+  const frontendBuildPath = path.join(__dirname, '../frontend/build');
 
+  app.use(express.static(frontendBuildPath));
+
+  // Must be last route
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
+    res.sendFile(path.join(frontendBuildPath, 'index.html'));
   });
 }
 
-
-
-app.use(errorMiddleware)
+// Error middleware
+app.use(errorMiddleware);
 
 module.exports = app;
